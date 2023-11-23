@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AccountingApp.Server.Models
+namespace AccountingApp.Server.Models.Entities
 {
     public class Employee
     {
@@ -9,6 +9,6 @@ namespace AccountingApp.Server.Models
         [Required]
         public string Name { get; set; }
         [Required]
-        public DateTime HiringDate { get; set; }
+        public decimal HourlyRate { get; set; }
     }
 }

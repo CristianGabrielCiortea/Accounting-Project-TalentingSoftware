@@ -10,22 +10,22 @@ using AccountingApp.Server.Models.Entities;
 
 namespace AccountingApp.Server.Controllers
 {
-    public class EmployeesController : Controller
+    public class ProjectsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public EmployeesController(ApplicationDbContext context)
+        public ProjectsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Employees
+        // GET: Projects
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Employees.ToListAsync());
+            return View(await _context.Projects.ToListAsync());
         }
 
-        // GET: Employees/Details/5
+        // GET: Projects/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +33,39 @@ namespace AccountingApp.Server.Controllers
                 return NotFound();
             }
 
-            var employee = await _context.Employees
+            var project = await _context.Projects
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (employee == null)
+            if (project == null)
             {
                 return NotFound();
             }
 
-            return View(employee);
+            return View(project);
         }
 
-        // GET: Employees/Create
+        // GET: Projects/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Employees/Create
+        // POST: Projects/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,HourlyRate")] Employee employee)
+        public async Task<IActionResult> Create([Bind("Id,Name,InitialBudget")] Project project)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(employee);
+                _context.Add(project);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(employee);
+            return View(project);
         }
 
-        // GET: Employees/Edit/5
+        // GET: Projects/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +73,22 @@ namespace AccountingApp.Server.Controllers
                 return NotFound();
             }
 
-            var employee = await _context.Employees.FindAsync(id);
-            if (employee == null)
+            var project = await _context.Projects.FindAsync(id);
+            if (project == null)
             {
                 return NotFound();
             }
-            return View(employee);
+            return View(project);
         }
 
-        // POST: Employees/Edit/5
+        // POST: Projects/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,HourlyRate")] Employee employee)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,InitialBudget")] Project project)
         {
-            if (id != employee.Id)
+            if (id != project.Id)
             {
                 return NotFound();
             }
@@ -97,12 +97,12 @@ namespace AccountingApp.Server.Controllers
             {
                 try
                 {
-                    _context.Update(employee);
+                    _context.Update(project);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EmployeeExists(employee.Id))
+                    if (!ProjectExists(project.Id))
                     {
                         return NotFound();
                     }
@@ -113,10 +113,10 @@ namespace AccountingApp.Server.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(employee);
+            return View(project);
         }
 
-        // GET: Employees/Delete/5
+        // GET: Projects/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,34 +124,34 @@ namespace AccountingApp.Server.Controllers
                 return NotFound();
             }
 
-            var employee = await _context.Employees
+            var project = await _context.Projects
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (employee == null)
+            if (project == null)
             {
                 return NotFound();
             }
 
-            return View(employee);
+            return View(project);
         }
 
-        // POST: Employees/Delete/5
+        // POST: Projects/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var employee = await _context.Employees.FindAsync(id);
-            if (employee != null)
+            var project = await _context.Projects.FindAsync(id);
+            if (project != null)
             {
-                _context.Employees.Remove(employee);
+                _context.Projects.Remove(project);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool EmployeeExists(int id)
+        private bool ProjectExists(int id)
         {
-            return _context.Employees.Any(e => e.Id == id);
+            return _context.Projects.Any(e => e.Id == id);
         }
     }
 }
