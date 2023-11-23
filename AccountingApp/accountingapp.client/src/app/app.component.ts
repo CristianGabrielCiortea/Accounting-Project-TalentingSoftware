@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Employer } from './employer';
+import { EmployerService } from './employer.service';
 
 interface WeatherForecast {
   date: string;
@@ -14,23 +16,17 @@ interface WeatherForecast {
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  public forecasts: WeatherForecast[] = [];
+  employers: Employer[] | undefined;
 
-  constructor(private http: HttpClient) {}
+  constructor(private employerService: EmployerService) { }
 
-  ngOnInit() {
-    this.getForecasts();
+  ngOnInit(): void {
+    this.getEmployers();
   }
 
-  getForecasts() {
-    this.http.get<WeatherForecast[]>('/weatherforecast').subscribe(
-      (result) => {
-        this.forecasts = result;
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
+  getEmployers(): void {
+    this.employerService.getEmployers()
+      .subscribe(employers => this.employers = employers);
   }
 
   title = 'accountingapp.client';
