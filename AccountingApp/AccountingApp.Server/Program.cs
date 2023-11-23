@@ -15,6 +15,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite
 
 var app = builder.Build();
 
+app.UseCors(builder =>
+{
+    builder.AllowAnyOrigin()
+           .AllowAnyHeader()
+           .AllowAnyMethod();
+});
+
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
