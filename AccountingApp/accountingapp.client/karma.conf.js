@@ -36,7 +36,9 @@
     autoWatch: true,
     browsers: ['Chrome'],
     singleRun: false,
-    restartOnFileChange: true
+    restartOnFileChange: true,
+    listenAddress: 'localhost',
+    hostname: 'localhost'
   });
 };
 
