@@ -10,12 +10,17 @@ namespace AccountingApp.Server.Models.Entities
         [Required]
         public int TaskId { get; set; }
         [Required]
+        [EnumDataType(typeof(PaymentType))]
         public PaymentType PaymentType { get; set; }
         [Required]
         public DateTime? CompletedDate { get; set; }
         [Required]
+        public DateTime? ImportedDate { get; set; }
+        [Required]
         public bool IsCompleted { get; set; } 
         [Required]
         public int WorkedHours { get; set; }
+        [Required]
+        public int TotalPrice { get; set; }
     }
 }

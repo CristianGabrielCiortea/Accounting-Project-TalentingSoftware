@@ -9,6 +9,8 @@ namespace AccountingApp.Server.Models.Entities
         [Required]
         public int ProjectId { get; set; }
         [Required]
+        public int EmployeeId { get; set; }
+        [Required]
         public string Name { get; set; }
         [Required]
         public TaskDetails Details { get; set; }
