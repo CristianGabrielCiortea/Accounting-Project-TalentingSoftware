@@ -1,22 +1,27 @@
-<h1>Employer List</h1>
+<app-navigation></app-navigation>
+<div class="container">
+  <h1 style="text-align:center;">Employer List</h1>
+  <p *ngIf="!employers"><em>Loading...</em></p>
+  <table *ngIf="employers">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Hourly Rate</th>
+        <!-- Add other headers as needed -->
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let employer of employers">
+        <td>{{ employer.id }}</td>
+        <td>{{ employer.name }}</td>
+        <td>{{ employer.hourlyRate }}</td>
+        <!-- Add other cells as needed -->
+      </tr>
+    </tbody>
+  </table>
+</div>
 
-<p *ngIf="!employers"><em>Loading...</em></p>
 
-<table *ngIf="employers">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Name</th>
-      <th>Hourly Rate</th>
-      <!-- Add other headers as needed -->
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let employer of employers">
-      <td>{{ employer.id }}</td>
-      <td>{{ employer.name }}</td>
-      <td>{{ employer.hourlyRate }}</td>
-      <!-- Add other cells as needed -->
-    </tr>
-  </tbody>
-</table>
+
+
