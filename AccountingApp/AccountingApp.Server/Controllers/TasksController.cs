@@ -55,21 +55,45 @@ namespace AccountingApp.Server.Controllers
             return BadRequest(ModelState);
         }
 
-        //[HttpPost("{taskId}/AddDetails")]
-        //public async Task<IActionResult> AddDetails(int taskId, [FromBody] TaskDetails details)
-        //{
-        //    var task = await _context.Tasks.FirstOrDefaultAsync(t => t.Id == taskId);
 
-        //    if (task == null)
-        //    {
-        //        return NotFound("Task not found");
-        //    }
+        [HttpPut("Edit")]
+        public async Task<IActionResult> EditTask([FromBody] Models.Entities.Task updatedTask)
+        {
 
-        //    details.TaskId = taskId;
-        //    _context.Add(details);
-        //    await _context.SaveChangesAsync();
+            var existingTask = await _context.Tasks.Include(t => t.Details)
+                .FirstOrDefaultAsync(m => m.Id == updatedTask.Id);
 
-        //    return Ok(details);
-        //}
+            if (existingTask == null)
+            {
+                return NotFound();
+            }
+
+            existingTask.EmployeeId = updatedTask.EmployeeId;
+            existingTask.Name = updatedTask.Name;
+
+            existingTask.Details.PaymentType = updatedTask.Details.PaymentType;
+            existingTask.Details.CompletedDate = updatedTask.Details.CompletedDate;
+            existingTask.Details.IsCompleted = updatedTask.Details.IsCompleted;
+            existingTask.Details.WorkedHours = updatedTask.Details.WorkedHours;
+            existingTask.Details.TotalPrice = updatedTask.Details.TotalPrice;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!_context.Tasks.Any(e => e.Id == updatedTask.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return Ok(existingTask);
+        }
     }
 }
