@@ -1,8 +1,8 @@
 ﻿using AccountingApp.Server.Data;
 using AccountingApp.Server.Models.Entities;
+using AccountingApp.Server.Models.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Schema;
 
 namespace AccountingApp.Server.Controllers
 {
@@ -21,6 +21,7 @@ namespace AccountingApp.Server.Controllers
         public IActionResult GetProjectInfoModel(int projectId)
         {
             var projectInfo = _applicationDbContext.Projects
+                .Include(p => p.Employee)
                 .Include(p => p.Tasks)
                 .ThenInclude(t => t.Details)
                 .Where(p => p.Id == projectId)
@@ -32,8 +33,8 @@ namespace AccountingApp.Server.Controllers
                     ProjectType = p.Type,
                     HoursSpent = CalculateHoursSpent(p.Tasks),
                     CompletedTasks = CalculateCompletedTasks(p.Tasks),
-                    TotalCostSoFar = CalculateTotalCostSoFar(p.Tasks),
-                    //OverDue = CalculateOverDue(p.InitialBudget,p.Tasks)
+                    TotalCostSoFar = CalculateTotalCostSoFar(p.Employee, p.Tasks),
+                    OverDue = CalculateOverDue(p.InitialBudget, p.Tasks, p.Employee)
                 })
                 .FirstOrDefault();
 
@@ -55,14 +56,29 @@ namespace AccountingApp.Server.Controllers
             return tasks.Count(t => t.Details.IsCompleted);
         }
 
-        private decimal CalculateTotalCostSoFar(ICollection<Models.Entities.Task> tasks)
+        private decimal CalculateTotalCostSoFar(Employee employee, ICollection<Models.Entities.Task> tasks)
         {
-            return tasks.Sum(t => t.Price);
+            decimal totalCostSoFar = 0;
+
+            foreach (var task in tasks)
+            {
+                if ((task.Details.PaymentType == PaymentType.Fix) && (task.Details.IsCompleted))
+                {
+                    totalCostSoFar += task.Price;
+                }
+
+                if ((task.Details.PaymentType == PaymentType.Hourly) && (!task.Details.IsCompleted))
+                {
+                    totalCostSoFar += task.Details.WorkedHours * employee.HourlyRate;
+                }
+            }
+
+            return totalCostSoFar;
         }
 
-        /*private bool CalculateOverDue(decimal intialBudget, ICollection<Models.Entities.Task> tasks)
+        private bool CalculateOverDue(decimal intialBudget, ICollection<Models.Entities.Task> tasks, Employee employee)
         {
-
-        }*/
+            return intialBudget < CalculateTotalCostSoFar(employee, tasks) ? true : false;
+        }
     }
 }

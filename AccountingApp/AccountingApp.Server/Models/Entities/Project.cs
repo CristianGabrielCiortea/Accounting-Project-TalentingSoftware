@@ -1,5 +1,6 @@
 ﻿using AccountingApp.Server.Models.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AccountingApp.Server.Models.Entities
 {
@@ -14,5 +15,9 @@ namespace AccountingApp.Server.Models.Entities
         [Required]
         public decimal InitialBudget { get; set; }
         public ICollection<Task> Tasks { get; set; }
+        [Required]
+        public int EmployeeId { get; set; }
+        [ForeignKey("EmployeeId")]
+        public Employee Employee { get; set; }
     }
 }
