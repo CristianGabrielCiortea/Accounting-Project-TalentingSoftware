@@ -1,8 +1,8 @@
 <h1>Employer List</h1>
 
-<p *ngIf="!employers"><em>Loading...</em></p>
+<p *ngIf="!employees"><em>Loading...</em></p>
 
-<table *ngIf="employers">
+<table *ngIf="employees">
   <thead>
     <tr>
       <th>ID</th>
@@ -12,10 +12,10 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let employer of employers">
-      <td>{{ employer.id }}</td>
-      <td>{{ employer.name }}</td>
-      <td>{{ employer.hourlyRate }}</td>
+    <tr *ngFor="let employee of employees">
+      <td>{{ employee.id }}</td>
+      <td>{{ employee.name }}</td>
+      <td>{{ employee.hourlyRate }}</td>
       <!-- Add other cells as needed -->
     </tr>
   </tbody>
