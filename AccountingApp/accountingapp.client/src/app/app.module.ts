@@ -4,16 +4,19 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { EmployeeService } from './services/employee.service';
+import { UploadExcelComponent } from './components/upload-excel/upload-excel.component';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    UploadExcelComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule
   ],
-  providers: [EmployeeService],
+  providers: [EmployeeService,DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

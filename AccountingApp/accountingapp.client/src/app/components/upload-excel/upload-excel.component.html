@@ -1,0 +1,22 @@
+<input type="file" (change)="onFileChange($event)" />
+
+<div *ngFor="let empl of jsonData; index as i">
+  <div class="container">
+  {{i+1}}. {{empl.name}}: {{empl.hourlyRate}}/hour
+
+  <table class="table table-bordered mx-5">
+
+    <tbody *ngFor="let work of empl.workEntries">
+      <tr>
+        <td>{{work.date}}</td>
+        <td *ngIf="work.taskHourly">{{work.hoursWorked}} hours </td>
+        <td *ngIf="work.taskHourly">{{work.taskHourly}}</td>
+        <td *ngIf="work.taskSpecial">{{work.payable}} to pay </td>
+        <td *ngIf="work.taskSpecial">{{work.taskSpecial}}</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+</div>
+
