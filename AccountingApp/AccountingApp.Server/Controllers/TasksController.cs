@@ -2,6 +2,7 @@
 using AccountingApp.Server.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace AccountingApp.Server.Controllers
 {
@@ -19,7 +20,7 @@ namespace AccountingApp.Server.Controllers
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAllTasks()
         {
-            var tasks = await _context.Tasks.Include(t => t.Details).ToListAsync();
+            var tasks = await _context.Tasks.Include(t => t.TaskDetails).ToListAsync();
             return Ok(tasks);
         }
 
@@ -31,7 +32,7 @@ namespace AccountingApp.Server.Controllers
                 return BadRequest();
             }
 
-            var task = await _context.Tasks.Include(t => t.Details)
+            var task = await _context.Tasks.Include(t => t.TaskDetails)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (task == null)
@@ -55,21 +56,16 @@ namespace AccountingApp.Server.Controllers
             return BadRequest(ModelState);
         }
 
-        //[HttpPost("{taskId}/AddDetails")]
-        //public async Task<IActionResult> AddDetails(int taskId, [FromBody] TaskDetails details)
-        //{
-        //    var task = await _context.Tasks.FirstOrDefaultAsync(t => t.Id == taskId);
+        [HttpPost("AddDetails")]
+        public async Task<IActionResult> AddDetails([FromBody] TaskDetails details)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(details);
+                await _context.SaveChangesAsync();
+            }
 
-        //    if (task == null)
-        //    {
-        //        return NotFound("Task not found");
-        //    }
-
-        //    details.TaskId = taskId;
-        //    _context.Add(details);
-        //    await _context.SaveChangesAsync();
-
-        //    return Ok(details);
-        //}
+            return Ok(details);
+        }
     }
 }

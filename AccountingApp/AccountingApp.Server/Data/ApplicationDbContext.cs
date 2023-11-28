@@ -12,9 +12,9 @@ namespace AccountingApp.Server.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<TaskDetails>()
-                .Property(t => t.PaymentType)
-                .HasConversion<string>();
+        //    modelBuilder.Entity<Project>()
+        //        .Property(p => p.PaymentType)
+        //        .HasConversion<string>();
         }
 
         public DbSet<Employee> Employees { get; set; }

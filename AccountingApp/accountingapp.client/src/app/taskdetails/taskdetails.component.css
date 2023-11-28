@@ -1,0 +1,9 @@
+.multiple-items {
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+.center-data {
+  display: flex;
+  justify-content: center;
+}

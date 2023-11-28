@@ -2,7 +2,7 @@
 {
     public enum PaymentType
     {
-        Hourly,
-        Fix
+        Hourly=0,
+        FixedPrice=1
     }
 }

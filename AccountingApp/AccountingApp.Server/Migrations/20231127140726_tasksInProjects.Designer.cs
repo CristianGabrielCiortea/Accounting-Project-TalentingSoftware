@@ -3,6 +3,7 @@ using System;
 using AccountingApp.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AccountingApp.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231127140726_tasksInProjects")]
+    partial class tasksInProjects
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
@@ -103,7 +106,8 @@ namespace AccountingApp.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TaskId");
+                    b.HasIndex("TaskId")
+                        .IsUnique();
 
                     b.ToTable("TasksDetails");
                 });
@@ -121,13 +125,11 @@ namespace AccountingApp.Server.Migrations
 
             modelBuilder.Entity("AccountingApp.Server.Models.Entities.TaskDetails", b =>
                 {
-                    b.HasOne("AccountingApp.Server.Models.Entities.Task", "Task")
-                        .WithMany("TaskDetails")
-                        .HasForeignKey("TaskId")
+                    b.HasOne("AccountingApp.Server.Models.Entities.Task", null)
+                        .WithOne("Details")
+                        .HasForeignKey("AccountingApp.Server.Models.Entities.TaskDetails", "TaskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Task");
                 });
 
             modelBuilder.Entity("AccountingApp.Server.Models.Entities.Project", b =>
@@ -137,7 +139,7 @@ namespace AccountingApp.Server.Migrations
 
             modelBuilder.Entity("AccountingApp.Server.Models.Entities.Task", b =>
                 {
-                    b.Navigation("TaskDetails");
+                    b.Navigation("Details");
                 });
 #pragma warning restore 612, 618
         }
