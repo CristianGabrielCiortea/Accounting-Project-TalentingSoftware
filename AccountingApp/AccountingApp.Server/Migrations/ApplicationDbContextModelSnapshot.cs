@@ -48,6 +48,9 @@ namespace AccountingApp.Server.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("PaymentType")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.ToTable("Projects");
@@ -59,6 +62,9 @@ namespace AccountingApp.Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<decimal>("FixedPrice")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -67,6 +73,8 @@ namespace AccountingApp.Server.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
 
                     b.ToTable("Tasks");
                 });
@@ -77,16 +85,15 @@ namespace AccountingApp.Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime?>("CompletedDate")
+                    b.Property<DateTime?>("Date")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("PaymentType")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
 
                     b.Property<int>("TaskId")
                         .HasColumnType("INTEGER");
@@ -96,25 +103,41 @@ namespace AccountingApp.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TaskId")
-                        .IsUnique();
+                    b.HasIndex("TaskId");
 
                     b.ToTable("TasksDetails");
                 });
 
-            modelBuilder.Entity("AccountingApp.Server.Models.Entities.TaskDetails", b =>
+            modelBuilder.Entity("AccountingApp.Server.Models.Entities.Task", b =>
                 {
-                    b.HasOne("AccountingApp.Server.Models.Entities.Task", null)
-                        .WithOne("Details")
-                        .HasForeignKey("AccountingApp.Server.Models.Entities.TaskDetails", "TaskId")
+                    b.HasOne("AccountingApp.Server.Models.Entities.Project", "Project")
+                        .WithMany("Tasks")
+                        .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("AccountingApp.Server.Models.Entities.TaskDetails", b =>
+                {
+                    b.HasOne("AccountingApp.Server.Models.Entities.Task", "Task")
+                        .WithMany("TaskDetails")
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Task");
+                });
+
+            modelBuilder.Entity("AccountingApp.Server.Models.Entities.Project", b =>
+                {
+                    b.Navigation("Tasks");
                 });
 
             modelBuilder.Entity("AccountingApp.Server.Models.Entities.Task", b =>
                 {
-                    b.Navigation("Details")
-                        .IsRequired();
+                    b.Navigation("TaskDetails");
                 });
 #pragma warning restore 612, 618
         }
