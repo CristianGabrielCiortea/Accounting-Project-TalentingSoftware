@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TaskService } from '../services/task.service';
-import { Task } from '../models/publictypes';
+import { Employer, Project, Task } from '../models/publictypes';
 
 @Component({
   selector: 'app-taskdetails',
@@ -10,13 +10,30 @@ import { Task } from '../models/publictypes';
 export class TaskdetailsComponent implements OnInit {
 
   public tasks: Task[] = [];
-  constructor(private taskService: TaskService) {
+  public projects: Project[] = [];
+  public employees: Employer[] = [];
 
-  }
+  constructor(private taskService: TaskService) { }
 
   ngOnInit(): void {
     this.taskService.getTasks().subscribe((data) => {
       this.tasks = data;
     });
+    this.taskService.getProjects().subscribe((data) => {
+      this.projects = data;
+    });
+    this.taskService.getEmployees().subscribe((data) => {
+      this.employees = data;
+    });
+  }
+
+  getEmployeesName(id: Number | undefined) {
+    return this.employees.find(n => n.id === id)?.name;
+  }
+
+  getProjectName(id: Number | undefined) {
+    return this.projects.find(n => n.id === id)?.name;
   }
 }
+
+
