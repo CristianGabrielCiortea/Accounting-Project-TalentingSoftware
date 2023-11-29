@@ -1,1 +1,69 @@
-<p>taskdetails works!</p>
+<hr />
+<div class="container">
+  <div class="row justify-content-center align-items-center">
+    <div class="col text-center">
+      <h1>Current Tasks - Details</h1>
+    </div>
+  </div>
+  <hr />
+  <table class="table table-striped table-hover m-3" style="text-align:center;">
+    <thead class=" table-primary">
+      <tr class="">
+        <th>Id</th>
+        <th>Project Id</th>
+        <th>Employee Id</th>
+        <th>Name</th>
+        <th>Fixed Price</th>
+        <th>Worked Hours</th>
+        <th>Date</th>
+        <th>Completed</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let task of tasks">
+        <td>{{task.id}}</td>
+        <td>{{task.projectId}}</td>
+        <td>
+          <ng-container *ngIf="task.taskDetails && task.taskDetails.length > 0; else noDetails">
+            <div class="center-data">
+              <div *ngFor="let detail of task.taskDetails" [ngClass]="{'multiple-items': task.taskDetails.length > 1}">
+                {{ detail.employeeId }}
+              </div>
+            </div>
+          </ng-container>
+          <ng-template #noDetails>
+            <div>
+              -
+            </div>
+          </ng-template>
+        </td>
+        <td>{{task.name}}</td>
+        <td>{{task.fixedPrice}}</td>
+        <td>
+          <ng-container *ngIf="task.taskDetails && task.taskDetails.length > 0; else noDetails">
+            <div>
+              {{ task.taskDetails[0].workedHours ? task.taskDetails[0].workedHours > 0 ? task.taskDetails[0].workedHours : "-" : "-"}}
+            </div>
+          </ng-container>
+        </td>
+        <td>
+          <ng-container *ngIf="task.taskDetails && task.taskDetails.length > 0; else noDetails">
+            <div>
+              {{ task.taskDetails[0].date | date:'longDate' }}
+            </div>
+          </ng-container>
+        </td>
+        <td>
+          <ng-container *ngIf="task.taskDetails && task.taskDetails.length > 0; else noDetails">
+            <span *ngIf="task.taskDetails[0].isCompleted; else notCompleted">
+              <i class="bi bi-check"></i>
+            </span>
+            <ng-template #notCompleted>
+              <i class="bi bi-x"></i>
+            </ng-template>
+          </ng-container>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

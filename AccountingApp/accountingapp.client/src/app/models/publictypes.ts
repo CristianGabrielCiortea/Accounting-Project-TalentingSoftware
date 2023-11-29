@@ -20,6 +20,7 @@ export class Task {
   id: number | undefined;
   projectId: number | undefined;
   name: string | undefined;
+  taskDetails: TaskDetail[] | undefined;
   fixedPrice: number | undefined;
 }
 
@@ -29,6 +30,6 @@ export class TaskDetail {
   employeeId: number | undefined;
   date: Date | undefined;
   isCompleted: boolean | undefined = false;
-  workedHours: number | undefined = 0;
+  workedHours: number | undefined;
 }
 export enum PaymentType { "Hourly", "FixedPrice" } 

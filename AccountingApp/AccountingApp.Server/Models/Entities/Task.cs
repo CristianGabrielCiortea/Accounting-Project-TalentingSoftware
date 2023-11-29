@@ -15,7 +15,7 @@ namespace AccountingApp.Server.Models.Entities
         [ForeignKey("ProjectId")]
         [JsonIgnore]
         public virtual Project? Project { get; set; }
-        
+
         [Required]
         public int EmployeeId { get; set; }
         [Required]

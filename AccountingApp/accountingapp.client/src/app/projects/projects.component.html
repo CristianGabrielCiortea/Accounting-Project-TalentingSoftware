@@ -1,173 +1,173 @@
 
 <hr />
 <div class="row justify-content-center align-items-center">
-    <div class="col text-center">
-        <h1>Current projects</h1>
-    </div>
-    <div class="col-auto text-end">
-        <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#formPopup" (click)="selectProject()"><i class="bi bi-plus-circle-fill me-1"></i>Add Project</button>
-    </div>
+  <div class="col text-center">
+    <h1>Current projects</h1>
+  </div>
+  <div class="col-auto text-end">
+    <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#formPopup" (click)="selectProject()"><i class="bi bi-plus-circle-fill me-1"></i>Add Project</button>
+  </div>
 </div>
 <hr />
 <table class="table table-striped table-hover m-3">
-    <thead class=" table-primary">
-        <tr class="">
-            <th>Id</th>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Initial Budget</th>
-            <th>Total Spent</th>
-            <th>Remaining Budget</th>
-            <th>Total Hours</th>
-            <th>No. Tasks</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
+  <thead class=" table-primary">
+    <tr class="">
+      <th>Id</th>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Initial Budget</th>
+      <th>Total Spent</th>
+      <th>Remaining Budget</th>
+      <th>Total Hours</th>
+      <th>No. Tasks</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
 
-        <tr *ngFor="let project of projects">
-            <td>{{project.id}}</td>
-            <td>{{project.name}}</td>
-            <td>{{project.paymentType | paymentType }}</td>
-            <td>{{project.initialBudget}}</td>
-            <td>{{project.totalSpent}}</td>
-            <td>{{project.remainingBudget}}</td>
-            <td>{{(project.paymentType | paymentType) !="Hourly"? "":project.totalHours}}</td>
-            <td>{{(project.paymentType | paymentType) =="Hourly"? "":project.nrOfTasks}}</td>
-            <td>
-                <button class="btn btn-primary me-1" data-bs-toggle="modal" data-bs-target="#formPopup" (click)="selectProject(project)"><i class="bi bi-pencil me-1"></i>Edit</button>
-                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#formDelete" (click)="selectProject(project)"><i class="bi bi-trash me-1"></i>Delete</button>
-        </tr>
-    </tbody>
+    <tr *ngFor="let project of projects">
+      <td>{{project.id}}</td>
+      <td>{{project.name}}</td>
+      <td>{{project.paymentType | paymentType }}</td>
+      <td>{{project.initialBudget}}</td>
+      <td>{{project.totalSpent}}</td>
+      <td>{{project.remainingBudget}}</td>
+      <td>{{(project.paymentType | paymentType) !="Hourly"? "":project.totalHours}}</td>
+      <td>{{(project.paymentType | paymentType) =="Hourly"? "":project.nrOfTasks}}</td>
+      <td>
+        <button class="btn btn-primary me-1" data-bs-toggle="modal" data-bs-target="#formPopup" (click)="selectProject(project)"><i class="bi bi-pencil me-1"></i>Edit</button>
+        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#formDelete" (click)="selectProject(project)"><i class="bi bi-trash me-1"></i>Delete</button>
+    </tr>
+  </tbody>
 </table>
 
 <div class="modal fade" id="formPopup" tabindex="-1" aria-labelledby="formPopup" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Edit Project - {{selectedProject?.name}}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="container">
-                    <form #myForm="ngForm" (ngSubmit)="onSaveProjectForm(myForm)" *ngIf="selectedProject">
-                        <div class="container">
-                            <div class="row mb-3">
-                                <div class="col-md-12 d-flex align-items-start gap-3">
-                                    <label for="name" class="form-label">Name:</label>
-                                    <input type="text" id="name" class="form-control" name="name" [(ngModel)]="selectedProject.name" required>
-                                </div>
-                                <div *ngIf="myForm.controls['name']?.invalid && myForm.controls['name']?.touched"
-                                     class="invalid-feedback d-block">
-                                    Name is required.
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-12 d-flex align-items-start gap-3">
-                                    <label for="type" class="form-label">Payment Type:</label>
-                                    <select id="type" class="form-control" name="paymentType" [(ngModel)]="selectedProject.paymentType" required>
-                                        <option value="Hourly">Hourly</option>
-                                        <option value="FixedPrice">Fixed Price</option>
-                                    </select>
-                                </div>
-                                <div *ngIf="myForm.controls['paymentType']?.invalid && myForm.controls['paymentType']?.touched"
-                                     class="invalid-feedback d-block">
-                                    Payment Type is required.
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-12 d-flex align-items-start gap-3">
-                                    <label for="budget" class="form-label">Initial Budget:</label>
-                                    <input type="number" id="budget" class="form-control" name="initialBudget" [(ngModel)]="selectedProject.initialBudget" required>
-                                </div>
-                                <div *ngIf="myForm.controls['initialBudget']?.invalid && myForm.controls['initialBudget']?.touched"
-                                     class="invalid-feedback d-block">
-                                    Initial Budget is required.
-                                </div>
-                            </div>
-                            <hr />
-                            <div class="row">
-                                <div class="col">
-                                    <h5>Tasks</h5>
-                                </div>
-                                <div class="col text-end">
-                                    <button class="btn btn-primary" type="button" (click)="selectTask(selectedProject)"><i class="bi bi-plus-circle-fill me-1"></i>Add Task</button>
-                                </div>
-                            </div>
-                            <hr />
-                            <table class="table">
-                                <tr>
-                                    <th style="width:40%">Name</th>
-                                    <th style="width:40%">Fixed Price</th>
-                                    <th style="width:20%">Actions</th>
-                                </tr>
-                                <tr *ngIf="selectedTask">
-                                    <td>
-                                        <input #ctlTaskName type="text" class="form-control" name="nameTask" [(ngModel)]="selectedTask.name" required />
-                                        <div *ngIf="myForm.controls['nameTask']?.invalid && myForm.controls['nameTask']?.touched"
-                                             class="invalid-feedback d-block text-danger">
-                                            Name is required.
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <input type="number" class="form-control" name="fixedPrice" [(ngModel)]="selectedTask.fixedPrice"
-                                               [disabled]="(selectedProject.paymentType?.toString()!='FixedPrice')"
-                                               [required]="(selectedProject.paymentType?.toString()=='FixedPrice')" />
-                                        <div *ngIf="myForm.controls['fixedPrice']?.invalid && myForm.controls['fixedPrice']?.touched"
-                                             class="invalid-feedback d-block  text-danger">
-                                            Fixed price is required.
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-primary ms-2 me-1" type="button" (click)="addTask(selectedProject,selectedTask)"><i class="bi bi-floppy"></i></button>
-                                        <button class="btn btn-primary" type="button" (click)="cancelTaskEdit(selectedProject,selectedTask)"><i class="bi bi-x-circle"></i></button>
-                                    </td>
-                                </tr>
-                                <tr *ngFor="let task of selectedProject.tasks">
-                                    <td>{{task.name}}</td>
-                                    <td>{{(selectedProject.paymentType | paymentType) =="Hourly"? "":task.fixedPrice}}</td>
-                                    <td class="text-end">
-                                        <button class="btn btn-primary me-1" type="button" (click)="selectTask(selectedProject,task)"
-                                                [disabled]="selectedTask">
-                                            <i class="bi bi-pencil"></i>
-                                        </button>
-                                        <button class="btn btn-danger" type="button" (click)="removeTask(selectedProject,task)"
-                                                [disabled]="selectedTask">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </table>
-                            <div class="modal-footer row text-end ">
-                                <div class="col-12 m-0 p-0">
-                                    <button class="btn btn-success me-2" type="submit" data-bs-dismiss="modal" [disabled]="myForm.invalid">Submit</button>
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="cleanProject()">Close</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Project - {{selectedProject?.name}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <form #myForm="ngForm" (ngSubmit)="onSaveProjectForm(myForm)" *ngIf="selectedProject">
+            <div class="container">
+              <div class="row mb-3">
+                <div class="col-md-12 d-flex align-items-start gap-3">
+                  <label for="name" class="form-label">Name:</label>
+                  <input type="text" id="name" class="form-control" name="name" [(ngModel)]="selectedProject.name" required>
                 </div>
+                <div *ngIf="myForm.controls['name']?.invalid && myForm.controls['name']?.touched"
+                     class="invalid-feedback d-block">
+                  Name is required.
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-12 d-flex align-items-start gap-3">
+                  <label for="type" class="form-label">Payment Type:</label>
+                  <select id="type" class="form-control" name="paymentType" [(ngModel)]="selectedProject.paymentType" required>
+                    <option value="Hourly">Hourly</option>
+                    <option value="FixedPrice">Fixed Price</option>
+                  </select>
+                </div>
+                <div *ngIf="myForm.controls['paymentType']?.invalid && myForm.controls['paymentType']?.touched"
+                     class="invalid-feedback d-block">
+                  Payment Type is required.
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-12 d-flex align-items-start gap-3">
+                  <label for="budget" class="form-label">Initial Budget:</label>
+                  <input type="number" id="budget" class="form-control" name="initialBudget" [(ngModel)]="selectedProject.initialBudget" required>
+                </div>
+                <div *ngIf="myForm.controls['initialBudget']?.invalid && myForm.controls['initialBudget']?.touched"
+                     class="invalid-feedback d-block">
+                  Initial Budget is required.
+                </div>
+              </div>
+              <hr />
+              <div class="row">
+                <div class="col">
+                  <h5>Tasks</h5>
+                </div>
+                <div class="col text-end">
+                  <button class="btn btn-primary" type="button" (click)="selectTask(selectedProject)"><i class="bi bi-plus-circle-fill me-1"></i>Add Task</button>
+                </div>
+              </div>
+              <hr />
+              <table class="table">
+                <tr>
+                  <th style="width:40%">Name</th>
+                  <th style="width:40%">Fixed Price</th>
+                  <th style="width:20%">Actions</th>
+                </tr>
+                <tr *ngIf="selectedTask">
+                  <td>
+                    <input #ctlTaskName type="text" class="form-control" name="nameTask" [(ngModel)]="selectedTask.name" required />
+                    <div *ngIf="myForm.controls['nameTask']?.invalid && myForm.controls['nameTask']?.touched"
+                         class="invalid-feedback d-block text-danger">
+                      Name is required.
+                    </div>
+                  </td>
+                  <td>
+                    <input type="number" class="form-control" name="fixedPrice" [(ngModel)]="selectedTask.fixedPrice"
+                           [disabled]="(selectedProject.paymentType?.toString()!='FixedPrice')"
+                           [required]="(selectedProject.paymentType?.toString()=='FixedPrice')" />
+                    <div *ngIf="myForm.controls['fixedPrice']?.invalid && myForm.controls['fixedPrice']?.touched"
+                         class="invalid-feedback d-block  text-danger">
+                      Fixed price is required.
+                    </div>
+                  </td>
+                  <td>
+                    <button class="btn btn-primary ms-2 me-1" type="button" (click)="addTask(selectedProject,selectedTask)"><i class="bi bi-floppy"></i></button>
+                    <button class="btn btn-primary" type="button" (click)="cancelTaskEdit(selectedProject,selectedTask)"><i class="bi bi-x-circle"></i></button>
+                  </td>
+                </tr>
+                <tr *ngFor="let task of selectedProject.tasks">
+                  <td>{{task.name}}</td>
+                  <td>{{(selectedProject.paymentType | paymentType) =="Hourly"? "":task.fixedPrice}}</td>
+                  <td class="text-end">
+                    <button class="btn btn-primary me-1" type="button" (click)="selectTask(selectedProject,task)"
+                            [disabled]="selectedTask">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                    <button class="btn btn-danger" type="button" (click)="removeTask(selectedProject,task)"
+                            [disabled]="selectedTask">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              </table>
+              <div class="modal-footer row text-end ">
+                <div class="col-12 m-0 p-0">
+                  <button class="btn btn-success me-2" type="submit" data-bs-dismiss="modal" [disabled]="myForm.invalid">Submit</button>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="cleanProject()">Close</button>
+                </div>
+              </div>
             </div>
+          </form>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 
 <div class="modal fade " id="formDelete" tabindex="-2" aria-labelledby="formDelete" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Delete - {{selectedProject?.name}}?</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body text-start">
-                Do you want to delete the project?
-            </div>
-            <div class="modal-footer row text-end ">
-                <div class="col-12 m-0 pe-2">
-                    <button class="btn btn-danger me-2" type="button" data-bs-dismiss="modal" (click)="deleteProject(selectedProject)">Delete project</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="cleanProject()">Close</button>
-                </div>
-            </div>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete - {{selectedProject?.name}}?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-start">
+        Do you want to delete the project?
+      </div>
+      <div class="modal-footer row text-end ">
+        <div class="col-12 m-0 pe-2">
+          <button class="btn btn-danger me-2" type="button" data-bs-dismiss="modal" (click)="deleteProject(selectedProject)">Delete project</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="cleanProject()">Close</button>
         </div>
+      </div>
     </div>
+  </div>
 </div>

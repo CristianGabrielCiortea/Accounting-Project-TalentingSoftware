@@ -29,7 +29,7 @@ namespace AccountingApp.Server.Controllers
                                             {
                                                 det.TaskId,
                                                 det.WorkedHours,
-                                                IsCompleted=det.IsCompleted==true,
+                                                IsCompleted = det.IsCompleted == true,
                                                 HourlyRate = (double)e.HourlyRate
                                             }
                                           ),
@@ -41,8 +41,8 @@ namespace AccountingApp.Server.Controllers
                             Task = t,
                             TotalHours = td.Sum(x => x.WorkedHours),
                             TotalSpent = td.Sum(x => x.WorkedHours * x.HourlyRate),
-                            NrOfTasks = td.Count(c=>c.IsCompleted==true),
-                            TotalSpentFixed = t.FixedPrice* td.Count(c => c.IsCompleted == true)
+                            NrOfTasks = td.Count(c => c.IsCompleted == true),
+                            TotalSpentFixed = t.FixedPrice * td.Count(c => c.IsCompleted == true)
                         }).AsNoTracking();
 
             var projects = (from project in await _context.Projects.Include(p => p.Tasks).AsNoTracking().ToListAsync()
@@ -57,7 +57,7 @@ namespace AccountingApp.Server.Controllers
                                 Tasks = g.Key.Tasks,
                                 PaymentType = g.Key.PaymentType,
                                 TotalHours = g.Key.PaymentType == Models.Enums.PaymentType.FixedPrice ? 0 : g.Sum(x => x?.TotalHours ?? 0),
-                                TotalSpent = g.Key.PaymentType == Models.Enums.PaymentType.FixedPrice? g.Sum(x => (x?.TotalSpentFixed ?? 0)): g.Sum(x => (decimal)(x?.TotalSpent ?? 0)),
+                                TotalSpent = g.Key.PaymentType == Models.Enums.PaymentType.FixedPrice ? g.Sum(x => (x?.TotalSpentFixed ?? 0)) : g.Sum(x => (decimal)(x?.TotalSpent ?? 0)),
                                 NrOfTasks = g.Key.PaymentType == Models.Enums.PaymentType.Hourly ? 0 : g.Sum(x => x?.NrOfTasks ?? 0)
                             }).ToList();
 

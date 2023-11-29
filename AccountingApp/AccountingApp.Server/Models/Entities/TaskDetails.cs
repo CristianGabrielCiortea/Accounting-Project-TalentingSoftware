@@ -21,7 +21,7 @@ namespace AccountingApp.Server.Models.Entities
         [Required]
         public DateTime? Date { get; set; }
         [Required]
-        public bool IsCompleted { get; set; }  = false;
+        public bool IsCompleted { get; set; } = false;
         [Required]
         public int WorkedHours { get; set; } = 0;
     }

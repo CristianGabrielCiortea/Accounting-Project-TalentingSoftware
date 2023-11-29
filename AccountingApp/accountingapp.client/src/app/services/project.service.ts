@@ -23,7 +23,7 @@ export class ProjectService {
     return this.http.delete<void>(`${this.baseUrl}api/projects/Delete?id=${project.id}`);
   }
 
-updateProject(project: Project): Observable<Project> {
-  return this.http.put<Project>(`${this.baseUrl}api/projects/Update`, project);
+  updateProject(project: Project): Observable<Project> {
+    return this.http.put<Project>(`${this.baseUrl}api/projects/Update`, project);
   }
 }
