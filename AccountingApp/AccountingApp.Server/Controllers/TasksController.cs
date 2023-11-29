@@ -68,45 +68,5 @@ namespace AccountingApp.Server.Controllers
 
             return Ok(details);
         }
-
-        [HttpPut("Edit")]
-        public async Task<IActionResult> EditTask([FromBody] Models.Entities.Task updatedTask)
-        {
-
-            var existingTask = await _context.Tasks.Include(t => t.Details)
-                .FirstOrDefaultAsync(m => m.Id == updatedTask.Id);
-
-            if (existingTask == null)
-            {
-                return NotFound();
-            }
-
-            existingTask.EmployeeId = updatedTask.EmployeeId;
-            existingTask.Name = updatedTask.Name;
-
-            existingTask.Details.PaymentType = updatedTask.Details.PaymentType;
-            existingTask.Details.CompletedDate = updatedTask.Details.CompletedDate;
-            existingTask.Details.IsCompleted = updatedTask.Details.IsCompleted;
-            existingTask.Details.WorkedHours = updatedTask.Details.WorkedHours;
-            existingTask.Details.TotalPrice = updatedTask.Details.TotalPrice;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!_context.Tasks.Any(e => e.Id == updatedTask.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return Ok(existingTask);
-        }
     }
 }
