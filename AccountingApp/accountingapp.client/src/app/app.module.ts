@@ -7,9 +7,12 @@ import { AppComponent } from './app.component';
 import { ProjectsComponent } from './projects/projects.component';
 import { TaskdetailsComponent } from './taskdetails/taskdetails.component';
 import { ImportsalariesComponent } from './importsalaries/importsalaries.component';
+
 import { HomeComponent } from './home/home.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PaymentPipe } from './pipes/payment.pipe';
+import { UploadExcelComponent } from './importsalaries/upload-excel/upload-excel.component';
+import { DatePipe } from '@angular/common';
 export function getBaseUrl() {
   return document.getElementsByTagName('base')[0].href;
 }
@@ -20,6 +23,7 @@ export function getBaseUrl() {
     ProjectsComponent,
     TaskdetailsComponent,
     ImportsalariesComponent,
+    UploadExcelComponent,
     HomeComponent,
     PaymentPipe
   ],
@@ -38,7 +42,8 @@ export function getBaseUrl() {
 
   ],
   providers: [
-    { provide: 'BASE_URL', useFactory: getBaseUrl, deps: [] }
+    { provide: 'BASE_URL', useFactory: getBaseUrl, deps: [] },
+    DatePipe
   ],
   bootstrap: [AppComponent],
 

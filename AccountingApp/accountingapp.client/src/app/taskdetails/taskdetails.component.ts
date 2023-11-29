@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TaskService } from '../services/task.service';
-import { Task } from '../models/publictypes';
+import { Task, TaskInfoAll } from '../models/publictypes';
 
 @Component({
   selector: 'app-taskdetails',
@@ -10,6 +10,7 @@ import { Task } from '../models/publictypes';
 export class TaskdetailsComponent implements OnInit {
 
   public tasks: Task[] = [];
+  public tasksAll: TaskInfoAll[] = [];
   constructor(private taskService: TaskService) {
 
   }
@@ -18,5 +19,9 @@ export class TaskdetailsComponent implements OnInit {
     this.taskService.getTasks().subscribe((data) => {
       this.tasks = data;
     });
+
+    //this.taskService.getTasksWithAllInfo().subscribe((data) => {
+    //  this.tasksAll = data;
+    //});
   }
 }

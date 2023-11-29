@@ -1,0 +1,23 @@
+<input type="file" class="form-control w-25 ms-3" (change)="onFileChange($event)" *ngIf="!isImported" />
+
+<div *ngFor="let empl of jsonData; index as i">
+    <div class="container d-flex flex-column align-items-center">
+        <div class="row fs-3 fw-bold">
+            {{i+1}}. {{empl.name}}: {{empl.hourlyRate}}/hour
+        </div>
+
+        <table class="table table-striped mx-5 w-75 center-data">
+            <tbody *ngFor="let work of empl.workEntries">
+                <tr>
+                    <td style="width:200px;">{{work.date}}</td>
+                    <td style="width:200px;" *ngIf="work.taskHourly">{{work.hoursWorked}} hours </td>
+                    <td *ngIf="work.taskHourly">{{work.taskHourly}}</td>
+                    <td *ngIf="work.taskSpecial">{{work.payable}} to pay </td>
+                    <td *ngIf="work.taskSpecial">{{work.taskSpecial}}</td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
