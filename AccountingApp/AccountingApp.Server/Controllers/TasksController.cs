@@ -24,6 +24,27 @@ namespace AccountingApp.Server.Controllers
             var tasks = await _context.Tasks.Include(t => t.TaskDetails).ToListAsync();
             return Ok(tasks);
         }
+        [HttpGet("GetAllWithDetails")]
+        public async Task<IActionResult> GetAllWithDetails()
+        {
+            var tasks = await (from p in _context.Projects
+                               join o in _context.Tasks on p.Id equals o.ProjectId into taskList
+                               from task in taskList.DefaultIfEmpty()
+                               join od in _context.TasksDetails on task.Id equals od.TaskId into taskDetailsList
+                               from taskDetails in taskDetailsList.DefaultIfEmpty()
+                               join e in _context.Employees on taskDetails.EmployeeId equals e.Id into employeeList
+                               from emp in employeeList.DefaultIfEmpty()
+                               select new
+                               {
+                                   Project = p,
+                                   Employee = emp,
+                                   Task = task,
+                                   TaskDetails = taskDetails
+                               }).ToListAsync();
+
+
+            return Ok(tasks);
+        }
 
         [HttpGet("Get/{id}")]
         public async Task<IActionResult> GetTaskById(int? id)

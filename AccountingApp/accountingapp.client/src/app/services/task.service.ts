@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Task } from '../models/publictypes';
+import { Task, TaskInfoAll } from '../models/publictypes';
 
 @Injectable({
   providedIn: 'root'
@@ -14,5 +14,9 @@ export class TaskService {
 
   getTasks(): Observable<Task[]> {
     return this.http.get<Task[]>(`${this.baseUrl}api/tasks/GetAll`);
+  }
+
+  getTasksWithAllInfo(): Observable<TaskInfoAll[]> {
+    return this.http.get<TaskInfoAll[]>(`${this.baseUrl}api/tasks/GetAllWithDetails`);
   }
 }
