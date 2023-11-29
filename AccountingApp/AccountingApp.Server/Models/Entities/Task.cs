@@ -17,6 +17,8 @@ namespace AccountingApp.Server.Models.Entities
         public virtual Project? Project { get; set; }
 
         [Required]
+        public int EmployeeId { get; set; }
+        [Required]
         public string Name { get; set; }
         public decimal FixedPrice { get; set; } = 0;
         public Collection<TaskDetails>? TaskDetails { get; set; }

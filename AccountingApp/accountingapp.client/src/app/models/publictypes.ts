@@ -1,7 +1,8 @@
-export class Employer {
+export class Employee {
   id: number | undefined;
   name: string | undefined;
   hourlyRate: number | undefined;
+  workEntries?: WorkEntry[] | undefined;
 }
 
 export class Project {
@@ -32,4 +33,19 @@ export class TaskDetail {
   isCompleted: boolean | undefined = false;
   workedHours: number | undefined;
 }
-export enum PaymentType { "Hourly", "FixedPrice" } 
+export enum PaymentType { "Hourly", "FixedPrice" }
+
+export class WorkEntry {
+  date?: string;
+  hoursWorked?: number;
+  taskHourly?: string;
+  payable?: number;
+  taskSpecial?: string;
+}
+
+export class TaskInfoAll {
+  project: Project | undefined;
+  task: Task | undefined;
+  taskDetails: TaskDetail[] | undefined;
+  employee: Employee | undefined;
+}

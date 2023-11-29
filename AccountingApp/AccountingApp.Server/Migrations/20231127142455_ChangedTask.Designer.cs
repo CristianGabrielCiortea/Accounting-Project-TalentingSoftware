@@ -3,6 +3,7 @@ using System;
 using AccountingApp.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AccountingApp.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231127142455_ChangedTask")]
+    partial class ChangedTask
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
@@ -48,9 +51,6 @@ namespace AccountingApp.Server.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("PaymentType")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
 
                     b.ToTable("Projects");
@@ -62,8 +62,8 @@ namespace AccountingApp.Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<decimal>("FixedPrice")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -74,8 +74,6 @@ namespace AccountingApp.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProjectId");
-
                     b.ToTable("Tasks");
                 });
 
@@ -85,15 +83,20 @@ namespace AccountingApp.Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime?>("Date")
+                    b.Property<DateTime?>("CompletedDate")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTime?>("ImportedDate")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("PaymentType")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("TaskId")
                         .HasColumnType("INTEGER");
@@ -106,41 +109,25 @@ namespace AccountingApp.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TaskId");
+                    b.HasIndex("TaskId")
+                        .IsUnique();
 
                     b.ToTable("TasksDetails");
                 });
 
-            modelBuilder.Entity("AccountingApp.Server.Models.Entities.Task", b =>
-                {
-                    b.HasOne("AccountingApp.Server.Models.Entities.Project", "Project")
-                        .WithMany("Tasks")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Project");
-                });
-
             modelBuilder.Entity("AccountingApp.Server.Models.Entities.TaskDetails", b =>
                 {
-                    b.HasOne("AccountingApp.Server.Models.Entities.Task", "Task")
-                        .WithMany("TaskDetails")
-                        .HasForeignKey("TaskId")
+                    b.HasOne("AccountingApp.Server.Models.Entities.Task", null)
+                        .WithOne("Details")
+                        .HasForeignKey("AccountingApp.Server.Models.Entities.TaskDetails", "TaskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Task");
-                });
-
-            modelBuilder.Entity("AccountingApp.Server.Models.Entities.Project", b =>
-                {
-                    b.Navigation("Tasks");
                 });
 
             modelBuilder.Entity("AccountingApp.Server.Models.Entities.Task", b =>
                 {
-                    b.Navigation("TaskDetails");
+                    b.Navigation("Details")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
