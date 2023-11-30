@@ -1,9 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Employee, Project, Task } from '../models/publictypes';
+import { Employee, Project, Task, TaskInfoAll, TaskDetail } from '../models/publictypes';
 import { map, Observable } from 'rxjs';
-import { Task, TaskDetail, TaskInfoAll } from '../models/publictypes';
 
 @Injectable({
   providedIn: 'root'
