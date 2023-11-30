@@ -1,5 +1,5 @@
 <hr />
-<div class="container">
+<div class="container-fluid">
   <div class="row justify-content-center align-items-center">
       <div class="col text-center text-secondary">
           <h1>Current Tasks - Details</h1>
@@ -10,24 +10,31 @@
     <thead class=" table-primary">
       <tr class="">
         <th>Id</th>
-        <th>Project Id</th>
-        <th>Employee Id</th>
+        <th>Date</th>
+        <th>Project Name</th>
+        <th>Employee Name</th>
         <th>Name</th>
         <th>Fixed Price</th>
         <th>Worked Hours</th>
-        <th>Date</th>
         <th>Completed</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let task of tasks">
         <td>{{task.id}}</td>
-        <td>{{task.projectId}}</td>
+        <td>
+          <ng-container *ngIf="task.taskDetails && task.taskDetails.length > 0; else noDetails">
+            <div>
+              {{ task.taskDetails[0].date | date:'longDate' }}
+            </div>
+          </ng-container>
+        </td>
+        <td>{{getProjectName(task.projectId)}}</td>
         <td>
           <ng-container *ngIf="task.taskDetails && task.taskDetails.length > 0; else noDetails">
             <div class="center-data">
               <div *ngFor="let detail of task.taskDetails" [ngClass]="{'multiple-items': task.taskDetails.length > 1}">
-                {{ detail.employeeId }}
+                {{ getEmployeesName(detail.employeeId) }}
               </div>
             </div>
           </ng-container>
@@ -43,13 +50,6 @@
           <ng-container *ngIf="task.taskDetails && task.taskDetails.length > 0; else noDetails">
             <div>
               {{ task.taskDetails[0].workedHours ? task.taskDetails[0].workedHours > 0 ? task.taskDetails[0].workedHours : "-" : "-"}}
-            </div>
-          </ng-container>
-        </td>
-        <td>
-          <ng-container *ngIf="task.taskDetails && task.taskDetails.length > 0; else noDetails">
-            <div>
-              {{ task.taskDetails[0].date | date:'longDate' }}
             </div>
           </ng-container>
         </td>

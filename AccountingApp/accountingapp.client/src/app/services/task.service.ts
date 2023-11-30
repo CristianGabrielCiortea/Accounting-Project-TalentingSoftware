@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Employee, Project, Task } from '../models/publictypes';
 import { map, Observable } from 'rxjs';
 import { Task, TaskDetail, TaskInfoAll } from '../models/publictypes';
 
@@ -16,8 +18,12 @@ export class TaskService {
     return this.http.get<Task[]>(`${this.baseUrl}api/tasks/GetAll`);
   }
 
-  getTasksWithAllInfo(): Observable<TaskInfoAll[]> {
-    return this.http.get<TaskInfoAll[]>(`${this.baseUrl}api/tasks/GetAllWithDetails`);
+  getProjects(): Observable<Project[]> {
+    return this.http.get<Project[]>(`${this.baseUrl}api/projects/GetAll`);
+  }
+
+  getEmployees(): Observable<Employee[]> {
+    return this.http.get<Employee[]>(`${this.baseUrl}api/employees/GetAll`);
   }
 
   addTaskDetails(taskDetail: TaskDetail): Observable<TaskDetail> {
