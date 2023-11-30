@@ -11,7 +11,7 @@ export class EmployeeService {
     @Inject('BASE_URL') private baseUrl: string) {
   }
 
-  getEmployers(): Observable<Employee[]> {
+  getEmployees(): Observable<Employee[]> {
     return this.http.get<Employee[]>(`${this.baseUrl}api/employees/GetAll`);
   }
 }

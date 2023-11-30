@@ -24,6 +24,7 @@ namespace AccountingApp.Server.Controllers
             var tasks = await _context.Tasks.Include(t => t.TaskDetails).ToListAsync();
             return Ok(tasks);
         }
+
         [HttpGet("GetAllWithDetails")]
         public async Task<IActionResult> GetAllWithDetails()
         {
@@ -56,6 +57,25 @@ namespace AccountingApp.Server.Controllers
 
             var task = await _context.Tasks.Include(t => t.TaskDetails)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (task == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(task);
+        }
+
+        [HttpGet("GetByName/{name}")]
+        public async Task<IActionResult> GetTaskByName(string? name)
+        {
+            if (name == null)
+            {
+                return BadRequest();
+            }
+
+            var task = await _context.Tasks.Include(t => t.TaskDetails)
+                .FirstOrDefaultAsync(m => m.Name == name);
 
             if (task == null)
             {

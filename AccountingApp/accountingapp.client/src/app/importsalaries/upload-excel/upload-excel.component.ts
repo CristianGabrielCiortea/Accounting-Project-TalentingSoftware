@@ -1,7 +1,8 @@
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
-import { Employee } from './../../models/publictypes';
+import { Employee, Task, TaskDetail } from './../../models/publictypes';
 import * as XLSX from 'xlsx'
+import { TaskService } from '../../services/task.service';
 
 @Component({
   selector: 'app-upload-excel',
@@ -10,9 +11,10 @@ import * as XLSX from 'xlsx'
 })
 
 export class UploadExcelComponent {
-  constructor(private datepipe: DatePipe) { }
+  constructor(private datepipe: DatePipe,
+    private taskService: TaskService) { }
   jsonData: Employee[] = []
-  isImported= false;
+  isImported = false;
   @Output() IsImported = new EventEmitter<boolean>();
 
   onFileChange(evt: any) {
@@ -56,6 +58,7 @@ export class UploadExcelComponent {
           return element.name !== undefined && element.name != 'Name';
         });
 
+        this.updateTasks();
       }
       reader.readAsBinaryString(target.files[0]);
       this.isImported = true;
@@ -80,6 +83,51 @@ export class UploadExcelComponent {
       header[i] = this.datepipe.transform(header[i], "dd/MM/yyy")
     }
   }
+
+  public updateTasks(): void {
+    this.jsonData.forEach((employee: Employee) => {
+      if (employee.workEntries && employee.workEntries.length > 0) {
+        employee.workEntries.forEach((workEntry) => {
+          const taskName = workEntry.taskHourly ? workEntry.taskHourly : workEntry.taskSpecial;
+
+          if (taskName !== undefined) {
+            this.taskService.getTaskIdByName(taskName).subscribe(
+              (taskId) => {
+                console.log('Fetched taskId successfully:', taskId);
+
+                const transformedDate = this.datepipe.transform(workEntry.date, 'yyyy-MM-ddTHH:mm:ss.SSSZ');
+                const dateAsDate: Date | undefined = transformedDate ? new Date(transformedDate) : undefined;
+
+                const taskDetail: TaskDetail = {
+                  id: 0,
+                  taskId: taskId,
+                  employeeId: employee.id,
+                  date: dateAsDate,
+                  isCompleted: false,
+                  workedHours: workEntry.hoursWorked,
+                };
+
+                this.taskService.addTaskDetails(taskDetail).subscribe(
+                  () => {
+                    console.log('Task detail added successfully:', taskDetail);
+                  },
+                  (error) => {
+                    console.error('Error adding task detail', error);
+                  }
+                );
+              },
+              (error) => {
+                console.error('Error fetching taskId', error);
+              }
+            );
+          } else {
+            console.error('Task name is undefined');
+          }
+        });
+      }
+    });
+  }
+
 
 }
 

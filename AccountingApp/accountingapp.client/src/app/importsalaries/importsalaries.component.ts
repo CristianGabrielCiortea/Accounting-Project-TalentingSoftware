@@ -13,7 +13,7 @@ export class ImportsalariesComponent implements OnInit {
   constructor(private employeeService: EmployeeService) { }
 
   ngOnInit(): void {
-    this.employeeService.getEmployers().subscribe(
+    this.employeeService.getEmployees().subscribe(
       {
         next: (data: Employee[]) => { this.employees = data; },
         error: (error: any) => { console.log(error); }
