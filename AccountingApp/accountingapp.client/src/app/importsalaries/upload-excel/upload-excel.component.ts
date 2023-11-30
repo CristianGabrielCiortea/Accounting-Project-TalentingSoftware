@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
-import { Employee, Task, TaskDetail } from './../../models/publictypes';
+import { Employee, Task, TaskDetail, WorkEntry } from './../../models/publictypes';
 import * as XLSX from 'xlsx'
 import { TaskService } from '../../services/task.service';
 
@@ -88,46 +88,53 @@ export class UploadExcelComponent {
     this.jsonData.forEach((employee: Employee) => {
       if (employee.workEntries && employee.workEntries.length > 0) {
         employee.workEntries.forEach((workEntry) => {
-          const taskName = workEntry.taskHourly ? workEntry.taskHourly : workEntry.taskSpecial;
-
-          if (taskName !== undefined) {
-            this.taskService.getTaskIdByName(taskName).subscribe(
-              (taskId) => {
-                console.log('Fetched taskId successfully:', taskId);
-
-                const transformedDate = this.datepipe.transform(workEntry.date, 'yyyy-MM-ddTHH:mm:ss.SSSZ');
-                const dateAsDate: Date | undefined = transformedDate ? new Date(transformedDate) : undefined;
-
-                const taskDetail: TaskDetail = {
-                  id: 0,
-                  taskId: taskId,
-                  employeeId: employee.id,
-                  date: dateAsDate,
-                  isCompleted: false,
-                  workedHours: workEntry.hoursWorked,
-                };
-
-                this.taskService.addTaskDetails(taskDetail).subscribe(
-                  () => {
-                    console.log('Task detail added successfully:', taskDetail);
-                  },
-                  (error) => {
-                    console.error('Error adding task detail', error);
-                  }
-                );
-              },
-              (error) => {
-                console.error('Error fetching taskId', error);
-              }
-            );
-          } else {
-            console.error('Task name is undefined');
-          }
+          this.processWorkEntry(employee, workEntry);
         });
       }
     });
   }
 
+  private processWorkEntry(employee: Employee, workEntry: WorkEntry): void {
+    const taskName = workEntry.taskHourly ?? workEntry.taskSpecial;
+
+    if (taskName === undefined) {
+      console.error('Task name is undefined');
+      return;
+    }
+
+    this.taskService.getTaskIdByName(taskName).subscribe(
+      (taskId) => {
+        console.log('Fetched taskId successfully:', taskId);
+        this.addTaskDetail(employee, workEntry, taskId);
+      },
+      (error) => {
+        console.error('Error fetching taskId', error);
+      }
+    );
+  }
+
+  private addTaskDetail(employee: Employee, workEntry: WorkEntry, taskId: number): void {
+    const transformedDate = this.datepipe.transform(workEntry.date, 'yyyy-MM-ddTHH:mm:ss.SSSZ');
+    const dateAsDate: Date | undefined = transformedDate ? new Date(transformedDate) : undefined;
+
+    const taskDetail: TaskDetail = {
+      id: 0,
+      taskId: taskId,
+      employeeId: employee.id,
+      date: dateAsDate,
+      isCompleted: false,
+      workedHours: workEntry.hoursWorked,
+    };
+
+    this.taskService.addTaskDetails(taskDetail).subscribe(
+      () => {
+        console.log('Task detail added successfully:', taskDetail);
+      },
+      (error) => {
+        console.error('Error adding task detail', error);
+      }
+    );
+  }
 
 }
 
