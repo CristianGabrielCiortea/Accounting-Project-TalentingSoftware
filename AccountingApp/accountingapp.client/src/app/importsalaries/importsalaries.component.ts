@@ -77,7 +77,7 @@ export class ImportsalariesComponent implements OnInit {
   }
 
   private addTaskDetail(employee: Employee, workEntry: WorkEntry, taskId: number): void {
-    const transformedDate = this.datepipe.transform(workEntry.date, 'yyyy-MM-ddTHH:mm:ss.sssZ', 'UTC');
+    const transformedDate = this.datepipe.transform(workEntry.date, 'yyyy-dd-MMTHH:mm:ss.sssZ', 'UTC');
     const dateAsDate: Date | undefined = transformedDate ? new Date(transformedDate) : undefined;
 
     const taskDetail: TaskDetail = {
