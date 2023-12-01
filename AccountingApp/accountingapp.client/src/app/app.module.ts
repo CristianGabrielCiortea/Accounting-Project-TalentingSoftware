@@ -13,6 +13,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PaymentPipe } from './pipes/payment.pipe';
 import { UploadExcelComponent } from './importsalaries/upload-excel/upload-excel.component';
 import { DatePipe } from '@angular/common';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatNativeDateModule } from '@angular/material/core';
 export function getBaseUrl() {
   return document.getElementsByTagName('base')[0].href;
 }
@@ -38,8 +44,13 @@ export function getBaseUrl() {
       { path: 'task-details', component: TaskdetailsComponent, pathMatch: 'full' },
       { path: 'import-salaries', component: ImportsalariesComponent, pathMatch: 'full' },
       { path: '**', redirectTo: '', pathMatch: 'full' }
-    ])
-
+    ]),
+    NoopAnimationsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatIconModule
   ],
   providers: [
     { provide: 'BASE_URL', useFactory: getBaseUrl, deps: [] },
