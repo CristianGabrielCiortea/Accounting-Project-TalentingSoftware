@@ -41,6 +41,7 @@ export class WorkEntry {
   taskHourly?: string;
   payable?: number;
   taskSpecial?: string;
+  isCompleted?: boolean = false;
 }
 
 export class TaskInfoAll {

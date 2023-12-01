@@ -1,8 +1,8 @@
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
-import { Employee, Task, TaskDetail, WorkEntry } from './../../models/publictypes';
+import { Employee, WorkEntry } from './../../models/publictypes';
 import * as XLSX from 'xlsx'
-import { TaskService } from '../../services/task.service';
+import { SalaryService } from '../../services/salary.service';
 
 @Component({
   selector: 'app-upload-excel',
@@ -12,7 +12,7 @@ import { TaskService } from '../../services/task.service';
 
 export class UploadExcelComponent {
   constructor(private datepipe: DatePipe,
-    private taskService: TaskService) { }
+  private salaryService: SalaryService) { }
   jsonData: Employee[] = []
   isImported = false;
   @Output() IsImported = new EventEmitter<boolean>();
@@ -58,7 +58,7 @@ export class UploadExcelComponent {
           return element.name !== undefined && element.name != 'Name';
         });
 
-        this.updateTasks();
+        this.salaryService.updateSalaryData(this.jsonData);
       }
       reader.readAsBinaryString(target.files[0]);
       this.isImported = true;
@@ -80,60 +80,13 @@ export class UploadExcelComponent {
 
   setDates(header: any[]) {
     for (let i = 1; i < header.length; i++) {
-      header[i] = this.datepipe.transform(header[i], "dd/MM/yyy")
+      header[i] = this.datepipe.transform(header[i], "dd/MM/yyyy")
     }
   }
 
-  public updateTasks(): void {
-    this.jsonData.forEach((employee: Employee) => {
-      if (employee.workEntries && employee.workEntries.length > 0) {
-        employee.workEntries.forEach((workEntry) => {
-          this.processWorkEntry(employee, workEntry);
-        });
-      }
-    });
-  }
-
-  private processWorkEntry(employee: Employee, workEntry: WorkEntry): void {
-    const taskName = workEntry.taskHourly ?? workEntry.taskSpecial;
-
-    if (taskName === undefined) {
-      console.error('Task name is undefined');
-      return;
-    }
-
-    this.taskService.getTaskIdByName(taskName).subscribe(
-      (taskId) => {
-        console.log('Fetched taskId successfully:', taskId);
-        this.addTaskDetail(employee, workEntry, taskId);
-      },
-      (error) => {
-        console.error('Error fetching taskId', error);
-      }
-    );
-  }
-
-  private addTaskDetail(employee: Employee, workEntry: WorkEntry, taskId: number): void {
-    const transformedDate = this.datepipe.transform(workEntry.date, 'yyyy-MM-ddTHH:mm:ss.SSSZ');
-    const dateAsDate: Date | undefined = transformedDate ? new Date(transformedDate) : undefined;
-
-    const taskDetail: TaskDetail = {
-      id: 0,
-      taskId: taskId,
-      employeeId: employee.id,
-      date: dateAsDate,
-      isCompleted: false,
-      workedHours: workEntry.hoursWorked,
-    };
-
-    this.taskService.addTaskDetails(taskDetail).subscribe(
-      () => {
-        console.log('Task detail added successfully:', taskDetail);
-      },
-      (error) => {
-        console.error('Error adding task detail', error);
-      }
-    );
+  markAsDone(workEntry: WorkEntry): void {
+    workEntry.isCompleted = true;
+    this.salaryService.updateSalaryData(this.jsonData);
   }
 
 }

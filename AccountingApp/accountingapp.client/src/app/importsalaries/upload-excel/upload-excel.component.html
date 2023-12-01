@@ -8,13 +8,24 @@
 
         <table class="table table-striped mx-5 w-75 center-data">
             <tbody *ngFor="let work of empl.workEntries">
-                <tr>
-                    <td style="width:200px;">{{work.date}}</td>
-                    <td style="width:200px;" *ngIf="work.taskHourly">{{work.hoursWorked}} hours </td>
-                    <td *ngIf="work.taskHourly">{{work.taskHourly}}</td>
-                    <td *ngIf="work.taskSpecial">{{work.payable}} to pay </td>
-                    <td *ngIf="work.taskSpecial">{{work.taskSpecial}}</td>
-                </tr>
+              <tr>
+                <td style="width:200px;">{{work.date}}</td>
+                <td style="width:200px;" *ngIf="work.taskHourly">{{work.hoursWorked}} hours </td>
+                <td *ngIf="work.taskHourly">{{work.taskHourly}}</td>
+                <td *ngIf="work.taskSpecial">{{work.payable}} to pay </td>
+                <td *ngIf="work.taskSpecial">{{work.taskSpecial}}</td>
+                <td>
+                  <button *ngIf="work.taskHourly || (work.taskSpecial && work.payable)"
+                          class="btn btn-light"
+                          [class.btn-success]="work.isCompleted"
+                          data-bs-toggle="tooltip"
+                          data-bs-placement="top"
+                          title="Mark as Done"
+                          (click)="markAsDone(work)">
+                    <i class="bi bi-check2-circle"></i>
+                  </button>
+                </td>
+              </tr>
 
             </tbody>
         </table>
