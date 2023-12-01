@@ -36,7 +36,7 @@ export class TaskDetail {
 export enum PaymentType { "Hourly", "FixedPrice" }
 
 export class WorkEntry {
-  date?: string;
+  date?: Date;
   hoursWorked?: number;
   taskHourly?: string;
   payable?: number;
