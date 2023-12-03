@@ -6,6 +6,7 @@ import { EmployeeService } from '../services/employee.service';
 import { SalaryService } from '../services/salary.service';
 import { TaskService } from '../services/task.service';
 
+
 @Component({
   selector: 'app-importsalaries',
   templateUrl: './importsalaries.component.html',
@@ -15,6 +16,10 @@ export class ImportsalariesComponent implements OnInit {
   employees?: Employee[];
   isImported = false;
   areSalariesPaid = false;
+  isPopupVisible = false;
+  popupTitle = '';
+  popupMessage = '';
+
   constructor(private employeeService: EmployeeService,
     private taskService: TaskService,
     private datepipe: DatePipe,
@@ -44,6 +49,7 @@ export class ImportsalariesComponent implements OnInit {
     if (this.employees && this.isImported) {
       this.updateTasks(this.employees)
       this.areSalariesPaid = true;
+      this.openPopup('Success', 'Salaries paid successfully!');
     }
   }
 
@@ -98,4 +104,15 @@ export class ImportsalariesComponent implements OnInit {
       }
     );
   }
+
+  openPopup(title: string, message: string) {
+    this.popupTitle = title;
+    this.popupMessage = message;
+    this.isPopupVisible = true;
+  }
+
+  closePopup() {
+    this.isPopupVisible = false;
+  }
+
 }

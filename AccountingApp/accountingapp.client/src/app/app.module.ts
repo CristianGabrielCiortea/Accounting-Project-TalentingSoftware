@@ -19,6 +19,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatNativeDateModule } from '@angular/material/core';
+import { PopupComponent } from './popup/popup.component';
 export function getBaseUrl() {
   return document.getElementsByTagName('base')[0].href;
 }
@@ -31,7 +32,8 @@ export function getBaseUrl() {
     ImportsalariesComponent,
     UploadExcelComponent,
     HomeComponent,
-    PaymentPipe
+    PaymentPipe,
+    PopupComponent
   ],
   imports: [
     BrowserModule,

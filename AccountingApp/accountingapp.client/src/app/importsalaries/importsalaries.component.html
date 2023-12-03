@@ -1,33 +1,36 @@
 <hr />
 <div class="container">
-    <div class="row justify-content-center align-items-center">
-        <div class="col text-center text-secondary">
-            <h1>Import  Salaries</h1>
-        </div>
-        <div class="col-auto text-end">
-          <button class="btn btn-secondary" *ngIf="isImported" [class.btn-success]="areSalariesPaid" (click)="paySalaries()">
-            <i class="bi bi-credit-card me-1"></i>Pay Salaries
-          </button>
-        </div>
+  <div class="row justify-content-center align-items-center">
+    <div class="col text-center text-secondary">
+      <h1>Import  Salaries</h1>
     </div>
-    <hr />
-    <app-upload-excel class="ms-3" (IsImported)="onImported($event)"></app-upload-excel>
-    <table *ngIf="!isImported" class="table table-striped table-hover m-3" style="text-align:center;">
-        <thead class=" table-primary">
-            <tr class="">
-                <th>Id</th>
-                <th>Name</th>
-                <th>Hourly Rate</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let employee of employees">
-                <td>{{employee.id}}</td>
-                <td>{{ employee.name }}</td>
-                <td>{{ employee.hourlyRate }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="col-auto text-end">
+      <button class="btn btn-secondary" *ngIf="isImported" [class.btn-success]="areSalariesPaid" (click)="paySalaries()">
+        <i class="bi bi-credit-card me-1"></i>Pay Salaries
+      </button>
+    </div>
+  </div>
+  <hr />
+  <app-upload-excel class="ms-3" (IsImported)="onImported($event)"></app-upload-excel>
+  <table *ngIf="!isImported" class="table table-striped table-hover m-3" style="text-align:center;">
+    <thead class=" table-primary">
+      <tr class="">
+        <th>Id</th>
+        <th>Name</th>
+        <th>Hourly Rate</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let employee of employees">
+        <td>{{employee.id}}</td>
+        <td>{{ employee.name }}</td>
+        <td>{{ employee.hourlyRate }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <app-popup *ngIf="isPopupVisible" [title]="popupTitle" [message]="popupMessage" (closed)="closePopup()"></app-popup>
+
 </div>
 
 
