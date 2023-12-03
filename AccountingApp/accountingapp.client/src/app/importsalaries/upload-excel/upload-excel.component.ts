@@ -80,7 +80,7 @@ export class UploadExcelComponent {
 
   setDates(header: any[]) {
     for (let i = 1; i < header.length; i++) {
-      header[i] = this.datepipe.transform(header[i], "dd/MM/yyyy")
+      header[i] = this.datepipe.transform(header[i], 'dd/MM/yyyy', '+2400')
     }
   }
 
