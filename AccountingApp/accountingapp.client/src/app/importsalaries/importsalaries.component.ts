@@ -50,6 +50,7 @@ export class ImportsalariesComponent implements OnInit {
   }
 
   paySalaries() {
+    this.employees = this.dataService.jsonPaidWorkEntries;
     if (this.employees && this.isImported) {
       this.updateTasks(this.employees)
       this.areSalariesPaid = true;

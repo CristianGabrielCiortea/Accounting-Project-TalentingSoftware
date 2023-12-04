@@ -8,17 +8,11 @@ import { EmployeeService } from './employee.service';
   providedIn: 'root'
 })
 export class DataService {
+  public jsonPaidWorkEntries: Employee[] = [];
+  public jsonUnpaidWorkEntries: Employee[] = [];
 
-  constructor(private datepipe: DatePipe, private taskService:TaskService, private employeeService:EmployeeService) { }
-
-jsonPaidWorkEntries:Employee[]=[];
-jsonUnpaidWorkEntries:Employee[]=[];
-
-
-
-
-
-public updateData(newData: any[], newForPay: any[]): void {
+  constructor(private datepipe: DatePipe, private taskService: TaskService, private employeeService: EmployeeService) { }
+  public updateData(newData: any[], newForPay: any[]): void {
     this.jsonPaidWorkEntries = newForPay;
     this.jsonUnpaidWorkEntries = newData;
 
