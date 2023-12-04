@@ -17,4 +17,9 @@ export class DataService {
     this.jsonUnpaidWorkEntries = newData;
 
   }
+
+  public deleteWorkEntries() {
+    this.jsonPaidWorkEntries = [];
+    this.jsonUnpaidWorkEntries = [];
+  }
 }

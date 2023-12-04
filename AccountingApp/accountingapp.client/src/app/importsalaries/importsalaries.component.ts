@@ -17,7 +17,6 @@ import { DataService } from '../services/data.service';
 export class ImportsalariesComponent implements OnInit {
   employees?: Employee[];
   isImported = false;
-  areSalariesPaid = false;
   isPopupVisible = false;
   popupTitle = '';
   popupMessage = '';
@@ -26,8 +25,8 @@ export class ImportsalariesComponent implements OnInit {
     private taskService: TaskService,
     private datepipe: DatePipe,
     private salaryService: SalaryService,
-    private dataService:DataService,
-    private excelService:ExcelService) { }
+    private dataService: DataService,
+    private excelService: ExcelService) { }
 
   ngOnInit(): void {
     this.employeeService.getEmployees().subscribe(
@@ -51,15 +50,18 @@ export class ImportsalariesComponent implements OnInit {
 
   paySalaries() {
     this.employees = this.dataService.jsonPaidWorkEntries;
-    if (this.employees && this.isImported) {
+    if (this.employees.length != 0) {
       this.updateTasks(this.employees)
-      this.areSalariesPaid = true;
       this.openPopup('Success', 'Salaries paid successfully!');
+      let fileForPayments = this.datepipe.transform(Date.now(), 'yyy_MM_dd') + '_Payments'
+      this.excelService.exportToExcelPayments(this.dataService.jsonPaidWorkEntries, fileForPayments)
+      let fileForWorksUnpaid = this.datepipe.transform(Date.now(), 'yyy_MM_dd') + '_Unpaid Works'
+      this.excelService.exportToExcelWorksNotPaid(this.dataService.jsonUnpaidWorkEntries, fileForWorksUnpaid)
+      this.dataService.deleteWorkEntries();
     }
-    let fileForPayments=this.datepipe.transform(Date.now(),'yyy_MM_dd')+'_Payments'
-    this.excelService.exportToExcelPayments(this.dataService.jsonPaidWorkEntries,fileForPayments)
-    let fileForWorksUnpaid=this.datepipe.transform(Date.now(),'yyy_MM_dd')+'_Unpaid Works'
-    this.excelService.exportToExcelWorksNotPaid(this.dataService.jsonUnpaidWorkEntries,fileForWorksUnpaid)
+    else {
+      this.openPopup('Failure', 'There is nothing selected to be paid!');
+    }
   }
 
   public updateTasks(employees: Employee[]): void {
