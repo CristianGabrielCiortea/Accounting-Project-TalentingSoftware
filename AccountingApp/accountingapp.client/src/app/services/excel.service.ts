@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as XLSX from 'xlsx';
-import { saveAs } from 'file-saver';
+
 import { WorkEntry } from '../models/publictypes';
 
 @Injectable({
@@ -11,26 +11,32 @@ export class ExcelService {
   constructor() { }
 
   exportToExcelPayments(jsonData: any[], fileName: string): void {
-    const flattenedData = this.flattenJson(jsonData);
+    const flattenedData = this.flattenJsonForPaid(jsonData);
 
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(flattenedData);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet 1');
     const excelBuffer: any = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
     const data: Blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
-    saveAs(data, `${fileName}.xlsx`);
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(data);
+    link.download = `${fileName}.xlsx`;
+    link.click();
   }
   exportToExcelWorksNotPaid(jsonData: any[], fileName: string): void {
-    const flattenedData2 = this.flattenJson2(jsonData);
+    const flattenedData2 = this.flattenJsonforUnpaid(jsonData);
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(flattenedData2);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet 1');
     const excelBuffer: any = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
     const data: Blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
-    saveAs(data, `${fileName}.xlsx`);
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(data);
+    link.download = `${fileName}.xlsx`;
+    link.click();
   }
 
-  private flattenJson(jsonData: any[]): any[] {
+  private flattenJsonForPaid(jsonData: any[]): any[] {
     let flattenedData: any[] = [];
 
     jsonData.forEach(item => {
@@ -50,12 +56,12 @@ export class ExcelService {
 
     return flattenedData;
   }
-  private flattenJson2(jsonData: any[]): any[] {
+  private flattenJsonforUnpaid(jsonData: any[]): any[] {
     let flattenedData2: any[] = [];
 
     jsonData.forEach(item => {
       item.workEntries.forEach((work: WorkEntry) => {
-        const flattenedItem = {
+        const flattenedItem2 = {
           name: item.name,
           hourlyRate: item.hourlyRate,
           total: item.total,
@@ -68,7 +74,7 @@ export class ExcelService {
 
         };
 
-        flattenedData2.push(flattenedItem);
+        flattenedData2.push(flattenedItem2);
       });
     });
 

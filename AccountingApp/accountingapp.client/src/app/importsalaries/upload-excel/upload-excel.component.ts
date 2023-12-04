@@ -5,6 +5,7 @@ import * as XLSX from 'xlsx'
 import { SalaryService } from '../../services/salary.service';
 import { EmployeeService } from 'src/app/services/employee.service';
 import { TaskService } from 'src/app/services/task.service';
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
   selector: 'app-upload-excel',
@@ -17,7 +18,8 @@ export class UploadExcelComponent {
   constructor(private datepipe: DatePipe,
     private employeeService: EmployeeService,
     private salaryService: SalaryService,
-    private taskService: TaskService) { }
+    private taskService: TaskService,
+    private dataService:DataService) { }
   jsonData: Employee[] = [];
   jsonForPay: Employee[] = [];
   isImported = false;
@@ -253,7 +255,8 @@ export class UploadExcelComponent {
     this.jsonData[index].workEntries = this.jsonData[index].workEntries.filter(work => work.isCheckedForPay == false)
     this.jsonData = this.jsonData.filter(empl => empl.workEntries.length > 0);
     console.log(this.jsonData);
-    console.log(this.jsonForPay)
+    console.log(this.jsonForPay);
+    this.dataService.updateData(this.jsonData,this.jsonForPay);
   }
 
 }

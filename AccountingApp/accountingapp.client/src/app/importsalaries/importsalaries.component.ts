@@ -1,3 +1,4 @@
+import { ExcelService } from './../services/excel.service';
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -5,6 +6,7 @@ import { Employee, TaskDetail, WorkEntry } from '../models/publictypes';
 import { EmployeeService } from '../services/employee.service';
 import { SalaryService } from '../services/salary.service';
 import { TaskService } from '../services/task.service';
+import { DataService } from '../services/data.service';
 
 
 @Component({
@@ -23,7 +25,9 @@ export class ImportsalariesComponent implements OnInit {
   constructor(private employeeService: EmployeeService,
     private taskService: TaskService,
     private datepipe: DatePipe,
-    private salaryService: SalaryService) { }
+    private salaryService: SalaryService,
+    private dataService:DataService,
+    private excelService:ExcelService) { }
 
   ngOnInit(): void {
     this.employeeService.getEmployees().subscribe(
@@ -51,6 +55,10 @@ export class ImportsalariesComponent implements OnInit {
       this.areSalariesPaid = true;
       this.openPopup('Success', 'Salaries paid successfully!');
     }
+    let fileForPayments=this.datepipe.transform(Date.now(),'yyy_MM_dd')+'_Payments'
+    this.excelService.exportToExcelPayments(this.dataService.jsonPaidWorkEntries,fileForPayments)
+    let fileForWorksUnpaid=this.datepipe.transform(Date.now(),'yyy_MM_dd')+'_Unpaid Works'
+    this.excelService.exportToExcelWorksNotPaid(this.dataService.jsonUnpaidWorkEntries,fileForWorksUnpaid)
   }
 
   public updateTasks(employees: Employee[]): void {
