@@ -1,18 +1,45 @@
 <input type="file" class="form-control w-25 ms-3" (change)="onFileChange($event)" *ngIf="!isImported" />
 
 <div *ngFor="let empl of jsonData; index as i">
-    <div class="container d-flex flex-column align-items-center">
+    <div class="container d-flex flex-column">
         <div class="row fs-3 fw-bold">
-            {{i+1}}. {{empl.name}}: {{empl.hourlyRate}}/hour
+          <p>
+            {{empl.name}}: {{empl.hourlyRate}}/hour [Id: <span [ngClass]="empl.id!=null ? '' : 'redText'">{{empl.id||'Not Found!'}}]</span>
+          </p>
         </div>
 
         <table class="table table-striped mx-5 w-75 center-data">
+          <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="checkAll" [checked]="empl.isCheckedAll" [disabled]="empl.id==null"
+          (change)="onCheckAll(empl)">
+          <label class="form-check-label" for="checkAll">
+            Check All
+          </label>
+        </div>
+          <thead class=" table-primary">
+            <tr class="">
+              <th>
+              <th>Date</th>
+              <th>To Pay</th>
+              <th>Task Id</th>
+              <th>Task Name</th>
+              <th></th>
+            </tr>
+          </thead>
             <tbody *ngFor="let work of empl.workEntries">
               <tr>
-                <td style="width:200px;">{{work.date}}</td>
-                <td style="width:200px;" *ngIf="work.taskHourly">{{work.hoursWorked}} hours </td>
+                <td><input class="form-check-input"
+                  type="checkbox"
+                  [checked]="work.isCheckedForPay" [disabled]="work.id==0||empl.id==null"
+                  (change)="onWorkCheckChange(empl,work)"
+                  ></td>
+
+                <td>{{work.date}}</td>
+                <td *ngIf="work.taskHourly">{{work.hoursWorked}} hours </td>
+
+                <td *ngIf="work.taskSpecial">{{work.payable}} $</td>
+                <td [ngClass]="work.id!=0 ? '' : 'redText'">{{work.id||'Not Found'}}</td>
                 <td *ngIf="work.taskHourly">{{work.taskHourly}}</td>
-                <td *ngIf="work.taskSpecial">{{work.payable}} to pay </td>
                 <td *ngIf="work.taskSpecial">{{work.taskSpecial}}</td>
                 <td>
                   <button *ngIf="work.taskHourly || (work.taskSpecial && work.payable)"
@@ -28,7 +55,10 @@
               </tr>
 
             </tbody>
+            <div><b>Total to pay: {{empl.total}}</b></div>
+            <button class="btn btn-info" (click)="SendForPayment(empl,empl.workEntries)" [disabled]="empl.total==0">Send for pay</button>
         </table>
+
     </div>
 </div>
 

@@ -1,8 +1,10 @@
 export class Employee {
-  id: number | undefined;
+  id?: number | undefined;
   name: string | undefined;
   hourlyRate: number | undefined;
-  workEntries?: WorkEntry[] | undefined;
+  workEntries: WorkEntry[]=[];
+  total:number=0;
+  isCheckedAll?:boolean=false;
 }
 
 export class Project {
@@ -36,12 +38,14 @@ export class TaskDetail {
 export enum PaymentType { "Hourly", "FixedPrice" }
 
 export class WorkEntry {
+  id:number=0;
   date?: Date;
   hoursWorked?: number;
   taskHourly?: string;
   payable?: number;
   taskSpecial?: string;
   isCompleted?: boolean = false;
+  isCheckedForPay:boolean=false;
 }
 
 export class TaskInfoAll {
